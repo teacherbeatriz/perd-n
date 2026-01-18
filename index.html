@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos de Memoria para Niños</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
+
+        :root {
+            --primary: #FF9A8B;
+            --secondary: #66A6FF;
+            --accent: #F7D95B;
+            --bg-color: #F0F8FF;
+            --text-color: #555;
+            --success: #70E000;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--secondary);
+        }
+
+        .game-container {
+            background: white;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 3px solid #EEE;
+        }
+
+        .cita-objetivo {
+            font-style: italic;
+            color: #888;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .hidden { display: none; }
+        .btn-reset {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1em;
+        }
+        
+        /* --- Estilos Juego 1: Tren de Nubes --- */
+        #pieces-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            min-height: 60px;
+        }
+
+        .cloud-piece {
+            background: linear-gradient(to bottom, #fff, #eef);
+            border: 2px solid var(--secondary);
+            padding: 15px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.3s;
+            font-weight: bold;
+        }
+
+        .cloud-piece:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: #E3F2FD;
+        }
+        
+        .cloud-piece.used {
+            opacity: 0.5;
+            cursor: default;
+            transform: none;
+            background: #ddd;
+            border-color: #ccc;
+        }
+
+        #train-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #E8F5E9;
+            padding: 20px;
+            border-radius: 15px;
+            min-height: 100px;
+        }
+
+        .train-slot {
+            background: white;
+            border: 2px dashed #AAA;
+            padding: 12px;
+            border-radius: 15px;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        .train-slot.filled {
+            background: #D4EDDA;
+            border: 2px solid var(--success);
+            color: #155724;
+            animation: popIn 0.4s ease-out;
+        }
+
+        /* --- Estilos Juego 2: Jardín de Iconos --- */
+        #icons-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .icon-btn {
+            font-size: 3em;
+            background: white;
+            border: 3px solid var(--accent);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-btn:hover { transform: rotate(10deg) scale(1.1); }
+        .icon-btn.correct { 
+            background: var(--success); 
+            border-color: white; 
+            color: white;
+            pointer-events: none;
+        }
+        .icon-btn.shake { animation: shake 0.5s; border-color: red; }
+
+        #sentence-builder {
+            font-size: 1.2em;
+            min-height: 1.4em;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        .sentence-part {
+             display: inline-block;
+             margin-right: 5px;
+             animation: fadeIn 0.8s;
+        }
+
+        /* --- Animaciones --- */
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .final-success-message {
+            font-family: 'Fredoka One', cursive;
+            color: var(--success);
+            font-size: 1.5em;
+            animation: popIn 0.6s infinite alternate;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Juegos de Memoria: La Cita Preciosa</h1>
+    <p class="cita-objetivo">Objetivo: "Que vuestro adorno sea el perdón y la clemencia, y aquello que alegre los corazones de los favorecidos de Dios."</p>
+
+    <div class="game-container">
+        <h2>☁️ Juego 1: El Tren de las Nubes</h2>
+        <p>Haz clic en las nubes en el orden correcto para formar la frase en el tren.</p>
+        
+        <div id="pieces-container">
+            </div>
+
+        <div id="train-container">
+            <div class="train-slot" data-index="0">Vagón 1</div>
+            <div class="train-slot" data-index="1">Vagón 2</div>
+            <div class="train-slot" data-index="2">Vagón 3</div>
+            <div class="train-slot" data-index="3">Vagón 4</div>
+        </div>
+        <div id="success-g1" class="final-success-message hidden">¡Muy bien hecho! 🎉</div>
+        <button class="btn-reset" onclick="initGame1()">Reiniciar Juego 1</button>
+    </div>
+
+
+    <div class="game-container" style="border-color: var(--accent);">
+        <h2>🎁 Juego 2: El Jardín de los Símbolos</h2>
+        <p>Descubre la frase oculta haciendo clic en los iconos en el orden correcto.</p>
+        <p>Pista: Adorno -> Perdón -> Alegría -> Corazones</p>
+
+        <div id="sentence-builder">
+            </div>
+
+        <div id="icons-grid">
+             </div>
+        
+        <div id="success-g2" class="final-success-message hidden">¡Excelente memoria! ✨</div>
+        <button class="btn-reset" style="background: var(--accent); color: #555" onclick="initGame2()">Reiniciar Juego 2</button>
+    </div>
+
+
+    <script>
+        // --- Datos Globales ---
+        const fullQuote = "Que vuestro adorno sea el perdón y la clemencia, y aquello que alegre los corazones de los favorecidos de Dios.";
+        
+        // Dividimos la cita en 4 partes lógicas para el Juego 1
+        const quoteParts = [
+            "Que vuestro adorno sea",
+            "el perdón y la clemencia,",
+            "y aquello que alegre los corazones",
+            "de los favorecidos de Dios."
+        ];
+
+        // Datos para el Juego 2 (Icono -> Parte de la frase)
+        const iconGameData = [
+            { icon: "🎀", text: "Que vuestro adorno sea", id: 1 },
+            { icon: "🤝", text: "el perdón y la clemencia,", id: 2 },
+            { icon: "😊", text: "y aquello que alegre", id: 3 },
+            { icon: "❤️", text: "los corazones de los favorecidos de Dios.", id: 4 }
+        ];
+
+
+        // ================= LÓGICA JUEGO 1 (Ordenación) =================
+        let currentGame1Index = 0;
+
+        function initGame1() {
+            currentGame1Index = 0;
+            const piecesContainer = document.getElementById('pieces-container');
+            const trainSlots = document.querySelectorAll('.train-slot');
+            document.getElementById('success-g1').classList.add('hidden');
+            
+            // Limpiar slots
+            trainSlots.forEach((slot, index) => {
+                slot.textContent = `Vagón ${index + 1}`;
+                slot.classList.remove('filled');
+            });
+
+            // Crear y desordenar piezas
+            let shuffledParts = [...quoteParts]
+                .map((text, index) => ({text, originalIndex: index}))
+                .sort(() => Math.random() - 0.5);
+            
+            piecesContainer.innerHTML = '';
+            shuffledParts.forEach(partData => {
+                const cloud = document.createElement('div');
+                cloud.classList.add('cloud-piece');
+                cloud.textContent = partData.text;
+                cloud.dataset.originalIndex = partData.originalIndex;
+                
+                cloud.addEventListener('click', function() {
+                    handleCloudClick(this, partData.originalIndex);
+                });
+                piecesContainer.appendChild(cloud);
+            });
+        }
+
+        function handleCloudClick(cloudElement, originalIndex) {
+            if (cloudElement.classList.contains('used')) return;
+
+            const trainSlots = document.querySelectorAll('.train-slot');
+
+            if (originalIndex === currentGame1Index) {
+                // Correcto
+                const targetSlot = trainSlots[currentGame1Index];
+                targetSlot.textContent = cloudElement.textContent;
+                targetSlot.classList.add('filled');
+                
+                cloudElement.classList.add('used');
+                currentGame1Index++;
+
+                if (currentGame1Index === quoteParts.length) {
+                     document.getElementById('success-g1').classList.remove('hidden');
+                }
+
+            } else {
+                // Incorrecto (Feedback visual simple)
+                cloudElement.style.background = "#ffcdd2";
+                setTimeout(() => {
+                    cloudElement.style.background = "";
+                }, 500);
+            }
+        }
+
+
+        // ================= LÓGICA JUEGO 2 (Iconos) =================
+        let currentGame2Step = 0;
+
+        function initGame2() {
+            currentGame2Step = 0;
+            const iconsGrid = document.getElementById('icons-grid');
+            const sentenceBuilder = document.getElementById('sentence-builder');
+            document.getElementById('success-g2').classList.add('hidden');
+            sentenceBuilder.innerHTML = '...';
+
+            // Desordenar iconos
+            let shuffledIcons = [...iconGameData].sort(() => Math.random() - 0.5);
+
+            iconsGrid.innerHTML = '';
+            shuffledIcons.forEach(data => {
+                const btn = document.createElement('div');
+                btn.classList.add('icon-btn');
+                btn.textContent = data.icon;
+                btn.dataset.id = data.id;
+                
+                btn.addEventListener('click', function() {
+                    handleIconClick(this, data);
+                });
+                iconsGrid.appendChild(btn);
+            });
+        }
+
+        function handleIconClick(btnElement, data) {
+             if (btnElement.classList.contains('correct')) return;
+
+             const sentenceBuilder = document.getElementById('sentence-builder');
+             const requiredId = iconGameData[currentGame2Step].id;
+
+             if (data.id === requiredId) {
+                 // Correcto
+                 btnElement.classList.add('correct');
+                 if (currentGame2Step === 0) sentenceBuilder.innerHTML = '';
+                 
+                 const span = document.createElement('span');
+                 span.classList.add('sentence-part');
+                 span.textContent = data.text + " ";
+                 sentenceBuilder.appendChild(span);
+
+                 currentGame2Step++;
+
+                 if (currentGame2Step === iconGameData.length) {
+                    document.getElementById('success-g2').classList.remove('hidden');
+                 }
+
+             } else {
+                 // Incorrecto
+                 btnElement.classList.add('shake');
+                 setTimeout(() => btnElement.classList.remove('shake'), 500);
+             }
+        }
+
+        // Iniciar los juegos al cargar la página
+        window.onload = () => {
+            initGame1();
+            initGame2();
+        };
+
+    </script>
+</body>
+</html>
