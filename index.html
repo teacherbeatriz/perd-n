@@ -2,704 +2,173 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juegos de Memoria para Niños - AVANZADOS</title>
+    <title>JUEGOS DE MEMORIA - CITA</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
-
-        :root {
-            --primary: #FF9A8B;    /* Rosa coral */
-            --secondary: #66A6FF;  /* Azul cielo */
-            --accent: #F7D95B;     /* Amarillo sol */
-            --tertiary: #B88BFF;   /* Lila suave */
-            --bg-color: #F0F8FF;   /* Blanco azulado */
-            --text-color: #555;
-            --success: #70E000;    /* Verde claro */
-            --error: #FF6B6B;      /* Rojo suave */
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1, h2 {
-            font-family: 'Fredoka One', cursive;
-            color: var(--secondary);
-            margin-top: 30px;
-        }
-
-        .game-container {
-            background: white;
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 3px solid #EEE;
-        }
-        .game-container.primary-border { border-color: var(--primary); }
-        .game-container.secondary-border { border-color: var(--secondary); }
-        .game-container.accent-border { border-color: var(--accent); }
-        .game-container.tertiary-border { border-color: var(--tertiary); }
-
-
-        .cita-objetivo {
-            font-style: italic;
-            color: #888;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-
-        .hidden { display: none; }
-        .btn-reset {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Fredoka One', cursive;
-            font-size: 1em;
-            transition: all 0.2s;
-        }
-        .btn-reset:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .btn-reset.accent { background: var(--accent); color: #555; }
-        .btn-reset.primary { background: var(--primary); }
-        .btn-reset.tertiary { background: var(--tertiary); }
-
-
-        /* --- Estilos Comunes de Éxito --- */
-        .final-success-message {
-            font-family: 'Fredoka One', cursive;
-            color: var(--success);
-            font-size: 1.5em;
-            animation: popIn 0.6s infinite alternate;
-            margin-top: 20px;
-        }
-
-        /* --- Estilos Juego 1: Tren de Nubes --- */
-        #pieces-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            min-height: 60px;
-        }
-
-        .cloud-piece {
-            background: linear-gradient(to bottom, #fff, #eef);
-            border: 2px solid var(--secondary);
-            padding: 15px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s, background 0.3s;
-            font-weight: bold;
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-
-        .cloud-piece:hover {
-            transform: scale(1.05) translateY(-3px);
-            background: #E3F2FD;
-        }
+        body { font-family: sans-serif; background: #f0f9ff; text-align: center; padding: 20px; color: #333; }
+        .juego { background: white; margin: 20px auto; padding: 20px; border-radius: 20px; max-width: 700px; border: 4px solid #66A6FF; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { color: #66A6FF; text-transform: uppercase; }
+        h2 { color: #FF6B6B; font-size: 1.2em; }
+        .cita-completa { background: #e0f2fe; padding: 15px; border-radius: 10px; font-weight: bold; margin-bottom: 20px; border: 2px dashed #66A6FF; }
         
-        .cloud-piece.used {
-            opacity: 0.5;
-            cursor: default;
-            transform: none;
-            background: #ddd;
-            border-color: #ccc;
-        }
+        /* Juego 1 y 2 */
+        .opciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
+        .pieza { background: #66A6FF; color: white; padding: 10px 15px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .pieza:hover { transform: scale(1.1); background: #3b82f6; }
+        .pieza.usada { background: #ccc; cursor: default; transform: none; }
+        .resultado { min-height: 50px; padding: 15px; background: #f8fafc; border: 2px solid #ddd; border-radius: 10px; margin-top: 10px; }
 
-        #train-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #E8F5E9;
-            padding: 20px;
-            border-radius: 15px;
-            min-height: 100px;
-        }
+        /* Juego 4: Memoria */
+        .grid-memoria { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .carta { height: 80px; background: #B88BFF; color: white; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; font-size: 0.8em; font-weight: bold; padding: 5px; text-align: center; }
+        .carta.oculta { background: #B88BFF; color: #B88BFF; }
+        .carta.resuelta { background: #70E000; }
 
-        .train-slot {
-            background: white;
-            border: 2px dashed #AAA;
-            padding: 12px;
-            border-radius: 15px;
-            min-height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            font-weight: bold;
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-        .train-slot.filled {
-            background: #D4EDDA;
-            border: 2px solid var(--success);
-            color: #155724;
-            animation: popIn 0.4s ease-out;
-        }
-
-        /* --- Estilos Juego 2: Jardín de Iconos --- */
-        #icons-grid {
-            display: flex;
-            flex-wrap: wrap; /* Para que se adapten mejor */
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .icon-btn {
-            font-size: 3em;
-            background: white;
-            border: 3px solid var(--accent);
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-btn:hover { transform: rotate(10deg) scale(1.1); }
-        .icon-btn.correct { 
-            background: var(--success); 
-            border-color: white; 
-            color: white;
-            pointer-events: none;
-        }
-        .icon-btn.shake { animation: shake 0.5s; border-color: red; }
-
-        #sentence-builder {
-            font-size: 1.2em;
-            min-height: 1.4em;
-            color: var(--secondary);
-            font-weight: bold;
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-        .sentence-part {
-             display: inline-block;
-             margin-right: 5px;
-             animation: fadeIn 0.8s;
-        }
-
-        /* --- Estilos Juego 3: Máquina de la Cita --- */
-        #quote-display-game3 {
-            font-size: 1.2em;
-            min-height: 1.4em;
-            color: var(--primary);
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-        .word-slot {
-            display: inline-block;
-            margin: 0 5px;
-            border-bottom: 2px dashed var(--primary);
-            padding: 0 5px;
-        }
-        .word-input {
-            width: 80px; /* Ajustar ancho */
-            padding: 5px;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            font-size: 0.9em;
-            text-align: center;
-            font-family: 'Nunito', sans-serif;
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-        .word-input.correct-word {
-            border-color: var(--success);
-            background-color: #e6ffe6;
-        }
-        .word-input.error-word {
-            border-color: var(--error);
-            background-color: #ffe6e6;
-        }
-
-        /* --- Estilos Juego 4: Muro de los Secretos --- */
-        #memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 columnas */
-            gap: 10px;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        .memory-card {
-            background: var(--tertiary);
-            color: white;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.5em;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            perspective: 1000px; /* Para efecto 3D flip */
-        }
-        .memory-card:hover:not(.flipped) {
-            transform: scale(1.05);
-        }
-        .memory-card .card-inner {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-        }
-        .memory-card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            box-sizing: border-box;
-            text-align: center;
-            word-break: break-word; /* Para que las palabras largas se rompan */
-            font-size: 0.8em; /* Tamaño de fuente más pequeño para el contenido */
-            text-transform: uppercase; /* Mayúsculas aquí */
-        }
-        .card-front {
-            background: var(--tertiary);
-            color: white;
-        }
-        .card-back {
-            background: var(--bg-color);
-            color: var(--text-color);
-            transform: rotateY(180deg);
-            border: 2px solid var(--tertiary);
-            font-weight: bold;
-        }
-        .memory-card.matched {
-            background: var(--success);
-            pointer-events: none;
-            box-shadow: 0 0 15px var(--success);
-            border-color: white;
-        }
-        .memory-card.matched .card-front {
-            background: var(--success);
-        }
-        .memory-card.matched .card-back {
-            border-color: var(--success);
-            background: var(--success);
-            color: white;
-        }
-
-
-        /* --- Animaciones --- */
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        .mensaje-ganar { color: #70E000; font-weight: bold; margin-top: 10px; display: none; }
+        button.reset { margin-top: 15px; padding: 8px 15px; border-radius: 5px; border: none; background: #333; color: white; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <audio id="audio-correct" src="https://www.soundjay.com/button/button-1.mp3"></audio>
-    <audio id="audio-error" src="https://www.soundjay.com/misc/fail-buzzer-02.mp3"></audio>
-    <audio id="audio-win" src="https://www.soundjay.com/misc/success-sound-2.mp3"></audio>
-
-    <h1>JUEGOS DE MEMORIA: LA CITA PRECIOSA</h1>
-    <p class="cita-objetivo">OBJETIVO: "QUE VUESTRO ADORNO SEA EL PERDÓN Y LA CLEMENCIA, Y AQUELLO QUE ALEGRE LOS CORAZONES DE LOS FAVORECIDOS DE DIOS."</p>
-
-    <div class="game-container secondary-border">
-        <h2>☁️ JUEGO 1: EL TREN DE LAS NUBES</h2>
-        <p>HAZ CLIC EN LAS NUBES EN EL ORDEN CORRECTO PARA FORMAR LA FRASE EN EL TREN.</p>
-        
-        <div id="pieces-container">
-            </div>
-
-        <div id="train-container">
-            <div class="train-slot" data-index="0">VAGÓN 1</div>
-            <div class="train-slot" data-index="1">VAGÓN 2</div>
-            <div class="train-slot" data-index="2">VAGÓN 3</div>
-            <div class="train-slot" data-index="3">VAGÓN 4</div>
-        </div>
-        <div id="success-g1" class="final-success-message hidden">¡MUY BIEN HECHO! 🎉</div>
-        <button class="btn-reset" onclick="initGame1()">REINICIAR JUEGO 1</button>
+    <h1>JUEGOS PARA APRENDER LA CITA</h1>
+    
+    <div class="cita-completa">
+        "QUE VUESTRO ADORNO SEA EL PERDÓN Y LA CLEMENCIA, Y AQUELLO QUE ALEGRE LOS CORAZONES DE LOS FAVORECIDOS DE DIOS."
     </div>
 
-
-    <div class="game-container accent-border">
-        <h2>🎁 JUEGO 2: EL JARDÍN DE LOS SÍMBOLOS</h2>
-        <p>DESCUBRE LA FRASE OCULTA HACIENDO CLIC EN LOS ICONOS EN EL ORDEN CORRECTO.</p>
-        <p>PISTA: ADORNO &rarr; PERDÓN &rarr; ALEGRÍA &rarr; CORAZONES</p>
-
-        <div id="sentence-builder">
-            </div>
-
-        <div id="icons-grid">
-             </div>
-        
-        <div id="success-g2" class="final-success-message hidden">¡EXCELENTE MEMORIA! ✨</div>
-        <button class="btn-reset accent" onclick="initGame2()">REINICIAR JUEGO 2</button>
+    <div class="juego">
+        <h2>1. ¡ORDENA LOS TROZOS!</h2>
+        <p>Haz clic en las nubes en orden:</p>
+        <div id="j1-opciones" class="opciones"></div>
+        <div id="j1-resultado" class="resultado"></div>
+        <div id="j1-ganar" class="mensaje-ganar">¡EXCELENTE! 🎉</div>
+        <button class="reset" onclick="iniciarJuego1()">Reiniciar</button>
     </div>
 
-    <div class="game-container primary-border">
-        <h2>✍️ JUEGO 3: LA MÁQUINA DE LA CITA</h2>
-        <p>COMPLETA LA FRASE ESCRIBIENDO LAS PALABRAS QUE FALTAN.</p>
-        
-        <div id="quote-display-game3">
-            </div>
-        <div id="success-g3" class="final-success-message hidden">¡GENIAL! ¡LO HAS COMPLETADO! 👍</div>
-        <button class="btn-reset primary" onclick="initGame3()">REINICIAR JUEGO 3</button>
+    <div class="juego" style="border-color: #F7D95B;">
+        <h2>2. BUSCA EL DIBUJO CORRECTO</h2>
+        <p>Haz clic: 🎀(ADORNO) -> 🤝(PERDÓN) -> 😊(ALEGRE) -> ❤️(CORAZONES)</p>
+        <div id="j2-opciones" class="opciones" style="font-size: 2em;"></div>
+        <div id="j2-resultado" class="resultado"></div>
+        <div id="j2-ganar" class="mensaje-ganar">¡LO LOGRASTE! ✨</div>
+        <button class="reset" onclick="iniciarJuego2()">Reiniciar</button>
     </div>
 
-    <div class="game-container tertiary-border">
-        <h2>🧩 JUEGO 4: EL MURO DE LOS SECRETOS</h2>
-        <p>ENCUENTRA LAS PAREJAS ESCONDIDAS. CADA PAREJA FORMA UNA PARTE DE LA CITA.</p>
-        
-        <div id="memory-grid">
-            </div>
-        <div id="success-g4" class="final-success-message hidden">¡ERES UN CRACK DE LA MEMORIA! 🏆</div>
-        <button class="btn-reset tertiary" onclick="initGame4()">REINICIAR JUEGO 4</button>
+    <div class="juego" style="border-color: #FF9A8B;">
+        <h2>3. LA PALABRA QUE FALTA</h2>
+        <p>Escribe la palabra: QUE VUESTRO ADORNO SEA EL...</p>
+        <input type="text" id="j3-input" placeholder="Escribe aquí..." style="padding: 10px; border-radius: 10px; border: 2px solid #FF9A8B; text-align: center; text-transform: uppercase;">
+        <div id="j3-ganar" class="mensaje-ganar">¡SÍ! ES EL PERDÓN. 👍</div>
     </div>
 
+    <div class="juego" style="border-color: #B88BFF;">
+        <h2>4. JUEGO DE PAREJAS</h2>
+        <p>Encuentra los trozos iguales:</p>
+        <div id="j4-grid" class="grid-memoria"></div>
+        <div id="j4-ganar" class="mensaje-ganar">¡QUÉ BUENA MEMORIA! 🏆</div>
+        <button class="reset" onclick="iniciarJuego4()">Reiniciar</button>
+    </div>
 
     <script>
-        // --- Datos Globales ---
-        const fullQuote = "QUE VUESTRO ADORNO SEA EL PERDÓN Y LA CLEMENCIA, Y AQUELLO QUE ALEGRE LOS CORAZONES DE LOS FAVORECIDOS DE DIOS.";
-        
-        // Dividimos la cita en 4 partes lógicas para el Juego 1
-        const quoteParts = [
-            "QUE VUESTRO ADORNO SEA",
-            "EL PERDÓN Y LA CLEMENCIA,",
-            "Y AQUELLO QUE ALEGRE LOS CORAZONES",
-            "DE LOS FAVORECIDOS DE DIOS."
+        // DATOS
+        const PARTES = ["QUE VUESTRO ADORNO SEA", "EL PERDÓN Y LA CLEMENCIA,", "Y AQUELLO QUE ALEGRE LOS CORAZONES", "DE LOS FAVORECIDOS DE DIOS."];
+        const ICONOS = [
+            {i: "🎀", t: "QUE VUESTRO ADORNO SEA "},
+            {i: "🤝", t: "EL PERDÓN Y LA CLEMENCIA, "},
+            {i: "😊", t: "Y AQUELLO QUE ALEGRE "},
+            {i: "❤️", t: "LOS CORAZONES DE LOS FAVORECIDOS DE DIOS."}
         ];
 
-        // Datos para el Juego 2 (Icono -> Parte de la frase)
-        const iconGameData = [
-            { icon: "🎀", text: "QUE VUESTRO ADORNO SEA", id: 1 },
-            { icon: "🤝", text: "EL PERDÓN Y LA CLEMENCIA,", id: 2 },
-            { icon: "😊", text: "Y AQUELLO QUE ALEGRE", id: 3 },
-            { icon: "❤️", text: "LOS CORAZONES DE LOS FAVORECIDOS DE DIOS.", id: 4 }
-        ];
-
-        // Datos para el Juego 3 (Palabras a rellenar)
-        const game3SentenceTemplate = [
-            "QUE VUESTRO [ADORNO] SEA EL [PERDÓN] Y LA [CLEMENCIA],",
-            "Y AQUELLO QUE [ALEGRE] LOS [CORAZONES]",
-            "DE LOS [FAVORECIDOS] DE DIOS."
-        ];
-
-        // Datos para el Juego 4 (Parejas de la cita)
-        const memoryPairs = [
-            "QUE VUESTRO ADORNO", "SEA EL PERDÓN", "Y LA CLEMENCIA,",
-            "Y AQUELLO QUE ALEGRE", "LOS CORAZONES", "DE LOS FAVORECIDOS DE DIOS."
-        ];
-        // Para que sean 12 cartas (6 parejas), necesitamos duplicar y mezclar
-        const memoryGameContent = [...memoryPairs, ...memoryPairs];
-
-
-        // --- Audios ---
-        const audioCorrect = document.getElementById('audio-correct');
-        const audioError = document.getElementById('audio-error');
-        const audioWin = document.getElementById('audio-win');
-
-        function playSound(audioElement) {
-            audioElement.currentTime = 0; // Reinicia el audio si ya está sonando
-            audioElement.play();
-        }
-
-
-        // ================= LÓGICA JUEGO 1 (Ordenación) =================
-        let currentGame1Index = 0;
-
-        function initGame1() {
-            currentGame1Index = 0;
-            const piecesContainer = document.getElementById('pieces-container');
-            const trainSlots = document.querySelectorAll('.train-slot');
-            document.getElementById('success-g1').classList.add('hidden');
-            
-            trainSlots.forEach((slot, index) => {
-                slot.textContent = `VAGÓN ${index + 1}`;
-                slot.classList.remove('filled');
-            });
-
-            let shuffledParts = [...quoteParts]
-                .map((text, index) => ({text, originalIndex: index}))
-                .sort(() => Math.random() - 0.5);
-            
-            piecesContainer.innerHTML = '';
-            shuffledParts.forEach(partData => {
-                const cloud = document.createElement('div');
-                cloud.classList.add('cloud-piece');
-                cloud.textContent = partData.text;
-                cloud.dataset.originalIndex = partData.originalIndex;
-                
-                cloud.addEventListener('click', function() {
-                    handleCloudClick(this, partData.originalIndex);
-                });
-                piecesContainer.appendChild(cloud);
-            });
-        }
-
-        function handleCloudClick(cloudElement, originalIndex) {
-            if (cloudElement.classList.contains('used')) return;
-
-            const trainSlots = document.querySelectorAll('.train-slot');
-
-            if (originalIndex === currentGame1Index) {
-                playSound(audioCorrect);
-                const targetSlot = trainSlots[currentGame1Index];
-                targetSlot.textContent = cloudElement.textContent;
-                targetSlot.classList.add('filled');
-                
-                cloudElement.classList.add('used');
-                currentGame1Index++;
-
-                if (currentGame1Index === quoteParts.length) {
-                     document.getElementById('success-g1').classList.remove('hidden');
-                     playSound(audioWin);
-                }
-
-            } else {
-                playSound(audioError);
-                cloudElement.style.background = var(--error);
-                setTimeout(() => {
-                    cloudElement.style.background = "";
-                }, 500);
-            }
-        }
-
-
-        // ================= LÓGICA JUEGO 2 (Iconos) =================
-        let currentGame2Step = 0;
-
-        function initGame2() {
-            currentGame2Step = 0;
-            const iconsGrid = document.getElementById('icons-grid');
-            const sentenceBuilder = document.getElementById('sentence-builder');
-            document.getElementById('success-g2').classList.add('hidden');
-            sentenceBuilder.innerHTML = '...';
-
-            let shuffledIcons = [...iconGameData].sort(() => Math.random() - 0.5);
-
-            iconsGrid.innerHTML = '';
-            shuffledIcons.forEach(data => {
-                const btn = document.createElement('div');
-                btn.classList.add('icon-btn');
-                btn.textContent = data.icon;
-                btn.dataset.id = data.id;
-                
-                btn.addEventListener('click', function() {
-                    handleIconClick(this, data);
-                });
-                iconsGrid.appendChild(btn);
-            });
-        }
-
-        function handleIconClick(btnElement, data) {
-             if (btnElement.classList.contains('correct')) return;
-
-             const sentenceBuilder = document.getElementById('sentence-builder');
-             const requiredId = iconGameData[currentGame2Step].id;
-
-             if (data.id === requiredId) {
-                 playSound(audioCorrect);
-                 btnElement.classList.add('correct');
-                 if (currentGame2Step === 0) sentenceBuilder.innerHTML = '';
-                 
-                 const span = document.createElement('span');
-                 span.classList.add('sentence-part');
-                 span.textContent = data.text + " ";
-                 sentenceBuilder.appendChild(span);
-
-                 currentGame2Step++;
-
-                 if (currentGame2Step === iconGameData.length) {
-                    document.getElementById('success-g2').classList.remove('hidden');
-                    playSound(audioWin);
-                 }
-
-             } else {
-                 playSound(audioError);
-                 btnElement.classList.add('shake');
-                 setTimeout(() => btnElement.classList.remove('shake'), 500);
-             }
-        }
-
-
-        // ================= LÓGICA JUEGO 3 (Máquina de la Cita) =================
-        let missingWords = [];
-        let quoteHtml = '';
-
-        function initGame3() {
-            missingWords = [];
-            quoteHtml = '';
-            document.getElementById('success-g3').classList.add('hidden');
-            const quoteDisplay = document.getElementById('quote-display-game3');
-
-            game3SentenceTemplate.forEach(line => {
-                const words = line.split(/(\[.*?\]|\s+)/).filter(Boolean); // Divide por espacios y por [palabra]
-
-                words.forEach(word => {
-                    if (word.startsWith('[') && word.endsWith(']')) {
-                        const originalWord = word.substring(1, word.length - 1);
-                        const inputId = `word-input-${missingWords.length}`;
-                        quoteHtml += `<input type="text" class="word-input" id="${inputId}" data-word="${originalWord.toUpperCase()}" placeholder="?" maxlength="${originalWord.length}" onkeyup="checkWord(this)">`;
-                        missingWords.push({id: inputId, word: originalWord.toUpperCase()});
-                    } else {
-                        quoteHtml += `<span>${word.trim()}</span>`;
+        // JUEGO 1
+        let paso1 = 0;
+        function iniciarJuego1() {
+            paso1 = 0;
+            document.getElementById('j1-resultado').innerHTML = "";
+            document.getElementById('j1-ganar').style.display = "none";
+            const cont = document.getElementById('j1-opciones');
+            cont.innerHTML = "";
+            [...PARTES].sort(() => Math.random() - 0.5).forEach(p => {
+                let div = document.createElement('div');
+                div.className = "pieza";
+                div.innerText = p;
+                div.onclick = () => {
+                    if (p === PARTES[paso1]) {
+                        document.getElementById('j1-resultado').innerHTML += p + " ";
+                        div.classList.add('usada');
+                        div.onclick = null;
+                        paso1++;
+                        if (paso1 === 4) document.getElementById('j1-ganar').style.display = "block";
                     }
-                });
-                quoteHtml += '<br>'; // Salto de línea por cada frase
-            });
-            quoteDisplay.innerHTML = quoteHtml;
-        }
-
-        function checkWord(inputElement) {
-            const correctWord = inputElement.dataset.word;
-            const enteredWord = inputElement.value.toUpperCase();
-
-            if (enteredWord === correctWord) {
-                inputElement.classList.remove('error-word');
-                inputElement.classList.add('correct-word');
-                inputElement.disabled = true; // Deshabilita el input correcto
-                playSound(audioCorrect);
-            } else if (enteredWord.length === correctWord.length && enteredWord !== correctWord) {
-                inputElement.classList.remove('correct-word');
-                inputElement.classList.add('error-word');
-                // playSound(audioError); // Podría ser molesto si lo hace en cada error
-            } else {
-                inputElement.classList.remove('correct-word', 'error-word');
-            }
-
-            // Comprobar si todas las palabras están correctas
-            const allInputs = document.querySelectorAll('#quote-display-game3 .word-input');
-            let allCorrect = true;
-            allInputs.forEach(input => {
-                if (input.value.toUpperCase() !== input.dataset.word) {
-                    allCorrect = false;
-                }
-            });
-
-            if (allCorrect) {
-                document.getElementById('success-g3').classList.remove('hidden');
-                playSound(audioWin);
-            }
-        }
-
-
-        // ================= LÓGICA JUEGO 4 (Memoria) =================
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let lockBoard = false; // Evita clicks mientras se voltean cartas
-
-        function initGame4() {
-            flippedCards = [];
-            matchedPairs = 0;
-            lockBoard = false;
-            document.getElementById('success-g4').classList.add('hidden');
-            const memoryGrid = document.getElementById('memory-grid');
-            memoryGrid.innerHTML = '';
-
-            let shuffledContent = [...memoryGameContent].sort(() => Math.random() - 0.5);
-
-            shuffledContent.forEach((content, index) => {
-                const card = document.createElement('div');
-                card.classList.add('memory-card');
-                card.dataset.index = index; // Para identificar la carta
-                card.innerHTML = `
-                    <div class="card-inner">
-                        <div class="card-front">?</div>
-                        <div class="card-back">${content}</div>
-                    </div>
-                `;
-                card.addEventListener('click', () => flipCard(card, content));
-                memoryGrid.appendChild(card);
+                };
+                cont.appendChild(div);
             });
         }
 
-        function flipCard(card, content) {
-            if (lockBoard) return;
-            if (card === flippedCards[0]) return; // Evitar doble click en la misma carta
+        // JUEGO 2
+        let paso2 = 0;
+        function iniciarJuego2() {
+            paso2 = 0;
+            document.getElementById('j2-resultado').innerHTML = "";
+            document.getElementById('j2-ganar').style.display = "none";
+            const cont = document.getElementById('j2-opciones');
+            cont.innerHTML = "";
+            [...ICONOS].sort(() => Math.random() - 0.5).forEach(obj => {
+                let div = document.createElement('div');
+                div.style.cursor = "pointer";
+                div.innerText = obj.i;
+                div.onclick = () => {
+                    if (obj.i === ICONOS[paso2].i) {
+                        document.getElementById('j2-resultado').innerHTML += obj.t;
+                        paso2++;
+                        if (paso2 === 4) document.getElementById('j2-ganar').style.display = "block";
+                    }
+                };
+                cont.appendChild(div);
+            });
+        }
 
-            card.classList.add('flipped');
-            flippedCards.push(card);
-
-            if (flippedCards.length === 2) {
-                lockBoard = true;
-                checkForMatch();
+        // JUEGO 3
+        document.getElementById('j3-input').onkeyup = function() {
+            if (this.value.toUpperCase() === "PERDÓN" || this.value.toUpperCase() === "PERDON") {
+                document.getElementById('j3-ganar').style.display = "block";
             }
-        }
-
-        function checkForMatch() {
-            const [card1, card2] = flippedCards;
-            const content1 = card1.querySelector('.card-back').textContent;
-            const content2 = card2.querySelector('.card-back').textContent;
-
-            if (content1 === content2) {
-                // Coincidencia!
-                card1.classList.add('matched');
-                card2.classList.add('matched');
-                playSound(audioCorrect);
-                matchedPairs++;
-                resetBoard();
-
-                if (matchedPairs === memoryPairs.length) {
-                    document.getElementById('success-g4').classList.remove('hidden');
-                    playSound(audioWin);
-                }
-            } else {
-                // No coincidencia
-                playSound(audioError);
-                setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card2.classList.remove('flipped');
-                    resetBoard();
-                }, 1000); // Dar un segundo para ver las cartas
-            }
-        }
-
-        function resetBoard() {
-            [flippedCards, lockBoard] = [[], false];
-        }
-
-
-        // Iniciar todos los juegos al cargar la página
-        window.onload = () => {
-            initGame1();
-            initGame2();
-            initGame3();
-            initGame4();
         };
 
+        // JUEGO 4
+        let elegidas = [];
+        function iniciarJuego4() {
+            const cont = document.getElementById('j4-grid');
+            document.getElementById('j4-ganar').style.display = "none";
+            cont.innerHTML = "";
+            let doble = [...PARTES, ...PARTES].sort(() => Math.random() - 0.5);
+            doble.forEach((p, idx) => {
+                let div = document.createElement('div');
+                div.className = "carta oculta";
+                div.innerText = p;
+                div.onclick = () => {
+                    if (elegidas.length < 2 && div.className.includes('oculta')) {
+                        div.classList.remove('oculta');
+                        elegidas.push(div);
+                        if (elegidas.length === 2) {
+                            if (elegidas[0].innerText === elegidas[1].innerText) {
+                                elegidas.forEach(e => e.classList.add('resuelta'));
+                                elegidas = [];
+                                if (document.querySelectorAll('.resuelta').length === 8) 
+                                    document.getElementById('j4-ganar').style.display = "block";
+                            } else {
+                                setTimeout(() => {
+                                    elegidas.forEach(e => e.classList.add('oculta'));
+                                    elegidas = [];
+                                }, 1000);
+                            }
+                        }
+                    }
+                };
+                cont.appendChild(div);
+            });
+        }
+
+        // INICIAR TODO
+        window.onload = () => { iniciarJuego1(); iniciarJuego2(); iniciarJuego4(); };
     </script>
 </body>
 </html>
